@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotable Quotes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex">
+        <div class="collapse navbar-collapse p-2" >
+        
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>  
+    </nav>
+
+    <div class="container mt-5">
+        <!-- Mostrar mensajes de éxito o error -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == 'quote_error' %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ message }}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-{{ category }}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <h1>Welecome , {{ user.name }}</h1>
+
+        <div class="row">
+            <div class="col">
+                <h2>Quotable Quotes</h2>
+                <!-- Mostrar citas -->
+                <div class="row border border-dark">
+                    {% for non_favorite_quote in non_favorite_quotes %}
+                    <div class="col-md-7">
+                        <br>    
+
+                            <div class="card mx-wd-7">
+                                <div class="card-body border border-dark">
+                                    <p class="card-text">{{ non_favorite_quote.text }}</p>
+                                    <p>Posted by <a href="/user_profile/{{ non_favorite_quote.user_id }}">{{ non_favorite_quote.user_name }}</a></p>
+                                    {% if non_favorite_quote.user_id == session.user_id %}
+                                        <form method="POST" action="/delete_quote">
+                                            <input type="hidden" name="quote_id" value="{{ non_favorite_quote.id }}">
+                                            <input type="hidden" name="is_favorite" value="false">
+                                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                            <a href="/edit_quote/{{ non_favorite_quote.id }}" class="btn btn-primary btn-sm">Editar</a>
+                                        </form>
+                                    {% endif %}
+                                    <br>
+                                    <form method="POST" action="/add_to_favorites/{{ non_favorite_quote.id }}">
+                                        <button type="submit" class="btn btn-info btn-sm">Add to Favorites</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col">
+                <div class="row px-2">
+                    <div class="col ">
+                        <h2 class="text-danger">Your favorites</h2>
+                        <!-- Mostrar citas favoritas -->
+                        <div class="row border border-danger ">
+                            {% for favorite_quote in favorite_quotes %}
+                                <div class="col-md-7 ">
+                                    <br>
+                                    <div class="card mx-wd-12">
+                                        <div class="card-body">
+                                            <p class="card-text">{{ favorite_quote.text }}</p>
+                                            <p>Posted by <a href="/user_profile/{{ favorite_quote.user_id }}">{{ favorite_quote.user_name }}</a></p>
+                                            {% if favorite_quote.user_id == session.user_id %}
+                                            <form method="POST" action="/delete_quote" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta cita?');">
+                                                <input type="hidden" name="quote_id" value="{{ favorite_quote.id }}">
+                                                <input type="hidden" name="is_favorite" value="true"> <!-- Agrega este campo para las citas favoritas -->
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                <a href="/edit_quote/{{ favorite_quote.id }}" class="btn btn-primary btn-sm">Edit</a>
+                                            </form>
+                                            {% endif %}
+                                            <br>
+                                            <form method="POST" action="/remove_from_favorites/{{ favorite_quote.id }}">
+                                                <button type="submit" class="btn btn-warning btn-sm">Remove from Favorites</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <br>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="  px-2">
+                    <h2>Agregar Nueva Cita</h2>
+                    <!-- Formulario para agregar nueva cita -->
+                    <form method="POST" action="/add_quote">
+                        <div class="form-group">
+                            <label for="quote_text">Cita:</label>
+                            <textarea class="form-control" id="quote_text" name="quote_text" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Agregar Cita</button>
+                    </form>
+                    <br>
+                </div>    
+            </div>
+        </div>
+    </div>
+    <br>
+</body>
+
+</html>
+
+
+

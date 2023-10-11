@@ -1,0 +1,23 @@
+-- Crear la base de datos
+CREATE DATABASE IF NOT EXISTS chat_global;
+
+-- Usar la base de datos
+USE chat_global;
+
+-- Crear la tabla de Usuarios
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(255) NOT NULL,
+    correo VARCHAR(255) NOT NULL UNIQUE,
+    contrasena VARCHAR(255) NOT NULL,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Crear la tabla de Mensajes
+CREATE TABLE IF NOT EXISTS mensajes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    contenido TEXT NOT NULL,
+    usuario_id INT,
+    enviado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);

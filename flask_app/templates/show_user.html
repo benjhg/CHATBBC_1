@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citas del Usuario</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    
+    <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex">
+        <div class="collapse navbar-collapse p-2" >
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            
+        </div>    
+    
+        <a href="{{ url_for('logout') }}">Logout</a>
+        </div>    
+    </nav>
+
+    <div class="container mt-5">
+
+
+        <!-- Mostrar citas -->
+        <h1>Posted by {{ user.name }}</h1>
+        <br>
+        <p>Count: {{ total_quotes }}</p>
+        
+        <ul>
+            {% if quotes %}
+                {% for quote in quotes %}
+                    <br>
+                    {{ quote.text }}  <!-- Asegúrate de utilizar el atributo correcto para el texto de la cita -->
+                    <br>
+                {% endfor %}
+            {% else %}
+                <li>No hay citas disponibles...</li>
+            {% endif %}
+        </ul>
+    </div>
+</body>
+
+
+</html>

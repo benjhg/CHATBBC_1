@@ -1,0 +1,22 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+.blue{
+    text-decoration:none; 
+    text-align:center; 
+    padding:11px 32px; 
+    border:solid 1px #004F72; 
+    -webkit-border-radius:6px;
+    -moz-border-radius:6px; 
+    border-radius: 6px; 
+    font:18px Arial, Helvetica, sans-serif; 
+    font-weight:bold; 
+    color:#E5FFFF; 
+    background:#7a40ed; 
+    -webkit-box-shadow:9px 10px 2px #bababa, inset 0px 6px 3px #ffffff; 
+    -moz-box-shadow: 9px 10px 2px #bababa,  inset 0px 6px 3px #ffffff;  
+    box-shadow:9px 10px 2px #bababa, inset 0px 6px 3px #ffffff;  
+     
+     }
