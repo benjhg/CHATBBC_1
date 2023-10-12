@@ -3,7 +3,7 @@ from flask import flash
 
 
 class Quote:
-    db_name = "citas"
+    db_name = "global_chat"
     def __init__(self, data):
         self.text = data.get('text')
         self.users_id = data.get('users_id')
@@ -80,7 +80,7 @@ class Quote:
         data = {
             'user_id': user_id
         }
-        results = connectToMySQL('citas').query_db(query, data)
+        results = connectToMySQL('cls.db_name').query_db(query, data)
 
         quotes = []
         for row in results:
@@ -111,7 +111,7 @@ class Quote:
         data = {
             'user_id': user_id
         }
-        results = connectToMySQL('citas').query_db(query, data)
+        results = connectToMySQL('cls.db_name').query_db(query, data)
 
         quotes = []
         for row in results:

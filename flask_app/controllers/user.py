@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, session, flash
 from flask_app import app
 from flask_app.models.users import User
 from flask_bcrypt import Bcrypt
-from flask_app.models.messages import Quote
+from flask_app.models.messages import message
 bcrypt = Bcrypt(app)
 
 @app.route('/')
@@ -10,34 +10,32 @@ def index():
     return render_template('index.html')
 
 @app.route('/register', methods=['POST'])
-def save():
+def register():
     if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-        alias = request.form['alias']
+        # Validar el formulario
+        is_valid = User.validate_register(request.form)
 
-        # Validar el formulario (puedes implementar la función validate_register en tu clase User si es necesario)
-        if not User.validate_register(request.form):
-            flash('Por favor, completa todos los campos.', 'register')
-            return redirect("/")
+        if is_valid:
+            # Cifrar la contraseña antes de guardarla en la base de datos
+            hashed_password = bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
 
-        # Cifrar la contraseña antes de almacenarla en la base de datos
-        pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+            # Crear un diccionario con los datos del usuario
+            user_data = {
+                "username": request.form['username'],
+                "email": request.form['email'],
+                "password": hashed_password,
+                "alias": request.form['alias']
+            }
 
-        # Crear un diccionario con los datos del usuario
-        user_data = {
-            "username": username,
-            "email": email,
-            "password": pw_hash,  # Guarda la contraseña cifrada
-            "alias": alias
-        }
+            # Guardar el usuario en la base de datos
+            user_id = User.save(user_data)
 
-        # Guardar el usuario en la base de datos
-        User.save(user_data)
+            # Establecer la sesión del usuario
+            session['user_id'] = user_id
 
-        flash('Registro exitoso. Ahora puedes iniciar sesión.', 'register')
-        return redirect("/")
+            return redirect('/dashboard')
+        else:
+            return redirect('/')
     
 
 
@@ -47,15 +45,20 @@ def login():
 
     if user and bcrypt.check_password_hash(user.password, request.form['password']):
         session['user_id'] = user.id
-        return render_template('Dashboard1.html')
+        return redirect('/dashboard')
     else:
-        flash("Invalid Email or Password", "login")
+        flash("Invalid Email or Password", "error")  # Cambiado a 'error'
         return redirect('/')
 
 
 @app.route('/dashboard')
 def dashboard():
-    if 'user_id' not in session:
+    # Ejemplo de lista de mensajes del chat (simula mensajes de la base de datos)
+    chat_messages = message.get_all_messages()
+    return render_template('dashboard.html', chat_messages=chat_messages)
+
+
+"""    if 'user_id' not in session:
         return redirect('logout')  # Redirigir al usuario a la página de inicio o de inicio de sesión
 
     user_id_sesion = session['user_id']
@@ -69,8 +72,15 @@ def dashboard():
     # Obtener datos del usuario y todas las citas para mostrar en el dashboard
     user = User.get_by_id({'id': user_id_sesion})
     quotes_with_users = Quote.get_quotes_with_user_names()
-    favorite_quote_ids = Quote.get_favorite_quote_ids(user_id_sesion)
-    return render_template("Dashboard.html", user=user, favorite_quotes=favorite_quotes, non_favorite_quotes=non_favorite_quotes, quotes_with_users=quotes_with_users, favorite_quote_ids=favorite_quote_ids)
+    favorite_quote_ids = Quote.get_favorite_quote_ids(user_id_sesion)"""
+    
+
+
+
+
+
+
+
 
 @app.route('/user_profile/<int:user_id>')
 def user_profile(user_id):

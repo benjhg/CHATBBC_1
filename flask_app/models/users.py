@@ -1,4 +1,5 @@
 from flask_app.config.mysqlconnection import connectToMySQL
+from flask import Flask, render_template, request, redirect, flash, session
 import re
 from flask import flash
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
@@ -16,7 +17,7 @@ class User:
     
     @classmethod
     def save(cls, data):
-        query = "INSERT INTO users (`username`,`email`,`password`,`alias`,`created_at`) VALUES (%(username)s, %(email)s, %(password)s,%(alias)s, NOW());"
+        query = "INSERT INTO users (username, email, password, alias, created_at) VALUES (%(username)s, %(email)s, %(password)s, %(alias)s, NOW());"
         return connectToMySQL(cls.db_name).query_db(query, data)
 
 
@@ -61,18 +62,26 @@ class User:
     @staticmethod
     def validate_register(user):
         is_valid = True
-        query = "SELECT * FROM users WHERE email = %(email)s;"
-        results = connectToMySQL(User.db_name).query_db(query,user)
-        if len(results) >= 1:
-            flash("Email already taken.","register")
-            is_valid=False
-        if not EMAIL_REGEX.match(user['email']):
-            flash("Invalid Email!!!","register")
-            is_valid=False
+
+        # Validaciones del formulario
         if len(user['username']) < 3:
-            flash("First name must be at least 3 characters","register")
-            is_valid= False
-        if len(user['password']) < 2:
-            flash("Password must be at least 2 characters","register")
-            is_valid= False
-        return is_valid            
+            flash("El nombre de usuario debe tener al menos 3 caracteres.", "register")
+            is_valid = False
+        if not EMAIL_REGEX.match(user['email']):
+            flash("Correo electrónico inválido.", "register")
+            is_valid = False
+        if len(user['password']) < 6:  # Ajusta la longitud mínima de la contraseña según tus requisitos
+            flash("La contraseña debe tener al menos 6 caracteres.", "register")
+            is_valid = False
+        if user['password'] != request.form['confirm']:
+            flash("Las contraseñas no coinciden.", "register")
+            is_valid = False
+
+        # Verificar si el correo electrónico ya está en uso
+        query = "SELECT * FROM users WHERE email = %(email)s;"
+        results = connectToMySQL(User.db_name).query_db(query, user)
+        if len(results) > 0:
+            flash("El correo electrónico ya está en uso.", "register")
+            is_valid = False
+
+        return is_valid     

@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Registration</title>
+    <title>Document</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
     <div class="d-flex justify-content-around">
-        <form action="/register" method="post" class="col-4 p-4 ">
+        <form action="/register" method="post" class="col-4 p-4 bg-dark text-light">
             <h2 class="text-primary">Register</h2>
             {% with messages = get_flashed_messages(category_filter=['register']) %}
                 {% if messages %}
@@ -22,24 +22,30 @@
                 {% endif %}
             {% endwith %}
             <div class="form-group">
-                <label for="name">User Name:</label>
-                <input type="text" id="username" name="username" class="form-control">
+                <label for="first_name">Nombre:</label>
+                <input type="text" name="username" class="form-control">
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="text" id="email" name="email" class="form-control">
+                <input type="text" name="email" class="form-control">
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" class="form-control">
+                <input type="password" name="password" class="form-control">
             </div>
             <div class="form-group">
-                <label for="password">Alias:</label>
-                <input type="password" id="alias" name="alias" class="form-control">
+                <label for="confirm">Confirm Password:</label>
+                <input type="password" name="confirm" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="last_name">Alias:</label>
+                <input type="text" name="alias" class="form-control">
             </div>
             <input type="submit" value="Register" class="btn btn-primary">
         </form>
-        <form action="/login" method="post" class="col-4 p-4">
+
+        
+        <form action="/login" method="post" class="col-4 p-4 bg-dark text-light">
             <h2 class="text-success">Login</h2>
             {% with messages = get_flashed_messages(category_filter=['login']) %}
                 {% if messages %}
@@ -53,11 +59,11 @@
             {% endwith %}
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="text" id="email" name="email" class="form-control">
+                <input type="text" name="email" class="form-control">
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" class="form-control">
+                <input type="password" name="password" class="form-control">
             </div>
             
             <input type="submit" value="Login" class="btn btn-success">

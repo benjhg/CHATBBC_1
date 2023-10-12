@@ -2,23 +2,23 @@ from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash
 
 
-class Quote:
-    db_name = "citas"
+class message:
+    db_name = "global_chat"
     def __init__(self, data):
-        self.text = data.get('text')
-        self.users_id = data.get('users_id')
-        self.updated_at = data.get('updated_at')
-        self.created_at = data.get('created_at')
+        self.content = data.get('content')
+        self.user_id = data.get('user_id')
+        self.sent_at = data.get('sent_at')
 
     classmethod
     def save(cls, data):
-        query = "INSERT INTO quotes (text, user_id) VALUES (%(text)s, %(user_id)s);"
+        query = "INSERT INTO messages (`content`,`user_id`,`sent_at`) VALUES (%(content)s, %(user_id)s, now());"
         return connectToMySQL(cls.db_name).query_db(query, data)
     
     @classmethod
-    def save(cls, data):
-        query = "INSERT INTO `citas`.`quotes` (`text`, `users_id`, `updated_at`, `created_at`) VALUES (%(text)s, %(users_id)s, NOW(), NOW());"
-        return connectToMySQL(cls.db_name).query_db(query, data)
+    def get_all_messages(cls):
+        query = "SELECT content FROM messages;"
+        results = connectToMySQL(cls.db_name).query_db(query)
+        return [messages['content']for messages in results ]
 
     @classmethod
     def update(cls, data):
@@ -68,11 +68,7 @@ class Quote:
         return quotes_with_names
 
 
-    @classmethod
-    def get_all_quotes(cls):
-        query = "SELECT text FROM quotes;"
-        results = connectToMySQL(cls.db_name).query_db(query)
-        return [quote['text']for quote in results ]
+
     
     @staticmethod
     def get_quotes_with_user_ids(user_id):
@@ -111,7 +107,7 @@ class Quote:
         data = {
             'user_id': user_id
         }
-        results = connectToMySQL('citas').query_db(query, data)
+        results = connectToMySQL('cls.db_name').query_db(query, data)
 
         quotes = []
         for row in results:
@@ -137,7 +133,7 @@ class Quote:
             quotes.append(cls(row))
         return quotes
 
-    def validate_quote(text):
+    def validate_message(text):
         is_valid = True
 
         if len(text) < 3:

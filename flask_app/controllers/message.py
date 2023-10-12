@@ -1,37 +1,32 @@
 from flask import render_template,redirect, session,request, flash, url_for
 from flask_app import app
-from flask_app.models.messages import Quote
+from flask_app.models.messages import message
 from flask_app.models.users import User
 from flask_app.config.mysqlconnection import connectToMySQL
-
 import mysql.connector
 
-@app.route('/add_quote', methods=['POST'])
-def new_cite():
-    if 'user_id' not in session:
-        return redirect('/dashboard')  # Redirige al usuario al dashboard si no está autenticado
+@app.route('/add_message', methods=['POST'])
+def add_message():
+    # Obtén el contenido del mensaje del formulario
+    content = request.form.get('content')  # Usa 'content' en lugar de 'message_text'
 
-    # Obtén datos del formulario
-    text = request.form.get("quote_text")
+    # Obten el user_id del usuario autenticado (puedes usar session['user_id'] si está configurado)
+    user_id = 1  # Cambia esto según cómo obtienes el ID del usuario autenticado
 
-    # Valida el texto de la cita
-    if not Quote.validate_quote(text):
-        flash('El campo de la cita no puede estar vacío.', 'error')
-        return redirect('/dashboard')  # Redirige al usuario al dashboard con un mensaje de error
+    # Valida el contenido del mensaje
+    if not content:
+        flash('El mensaje no puede estar vacío.', 'error')
+        return redirect(url_for('dashboard'))  # Redirige de vuelta al dashboard en caso de error
 
-    user_id = session["user_id"]
-
-    # Crea un diccionario con los datos
-    data = {
-        "text": text,
-        "users_id": user_id
+    # Guarda el mensaje en la base de datos utilizando el método save de la clase Message
+    message_data = {
+        'content': content,
+        'user_id': user_id
     }
+    message.save(message_data)  # Asegúrate de que 'Message' esté correctamente importado
 
-    # Guarda la nueva cita en la base de datos utilizando el método save de la clase Quote
-    Quote.save(data)
-
-    # Redirige al usuario de vuelta al dashboard después de añadir la cita
-    return redirect(url_for('dashboard'))
+    flash('Mensaje añadido correctamente.', 'success')
+    return redirect(url_for('dashboard'))  # Redirige al dashboard después de añadir el mensaje
 
 
 
