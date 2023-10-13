@@ -1,6 +1,6 @@
 from flask import render_template,redirect, session,request, flash, url_for
 from flask_app import app
-from flask_app.models.messages import message
+from flask_app.models.messages import Message
 from flask_app.models.users import User
 from flask_app.config.mysqlconnection import connectToMySQL
 import mysql.connector
@@ -8,7 +8,7 @@ import mysql.connector
 @app.route('/add_message', methods=['POST'])
 def add_message():
     # Obtén el contenido del mensaje del formulario
-    content = request.form.get('content')  # Usa 'content' en lugar de 'message_text'
+    content = request.form.get('content')
 
     # Obten el user_id del usuario autenticado (puedes usar session['user_id'] si está configurado)
     user_id = 1  # Cambia esto según cómo obtienes el ID del usuario autenticado
@@ -23,10 +23,13 @@ def add_message():
         'content': content,
         'user_id': user_id
     }
-    message.save(message_data)  # Asegúrate de que 'Message' esté correctamente importado
+    Message.save(message_data)  # Asegúrate de que 'Message' esté correctamente importado y configurado
 
     flash('Mensaje añadido correctamente.', 'success')
     return redirect(url_for('dashboard'))  # Redirige al dashboard después de añadir el mensaje
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 

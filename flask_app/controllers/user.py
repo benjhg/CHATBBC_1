@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, session, flash
 from flask_app import app
 from flask_app.models.users import User
 from flask_bcrypt import Bcrypt
-from flask_app.models.messages import message
+from flask_app.models.messages import Message
 bcrypt = Bcrypt(app)
 
 @app.route('/')
@@ -54,7 +54,7 @@ def login():
 @app.route('/dashboard')
 def dashboard():
     # Ejemplo de lista de mensajes del chat (simula mensajes de la base de datos)
-    chat_messages = message.get_all_messages()
+    chat_messages = Message.get_all_messages()
     return render_template('dashboard.html', chat_messages=chat_messages)
 
 

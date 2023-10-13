@@ -1,29 +1,27 @@
-from flask_app.config.mysqlconnection import connectToMySQL
+from flask_app.config.mysqlconnection import MySQLConnection
 from flask import flash
 
-
-class message:
+class Message:
     db_name = "global_chat"
     def __init__(self, data):
         self.content = data.get('content')
         self.user_id = data.get('user_id')
-        self.sent_at = data.get('sent_at')
 
-    classmethod
+    @classmethod
     def save(cls, data):
-        query = "INSERT INTO messages (`content`,`user_id`,`sent_at`) VALUES (%(content)s, %(user_id)s, now());"
-        return connectToMySQL(cls.db_name).query_db(query, data)
+        query = "INSERT INTO messages (content, user_id, sent_at) VALUES (%(content)s, %(user_id)s, NOW())"
+        return MySQLConnection('global_chat').query_db(query, data)
     
     @classmethod
     def get_all_messages(cls):
         query = "SELECT content FROM messages;"
-        results = connectToMySQL(cls.db_name).query_db(query)
+        results = MySQLConnection(cls.db_name).query_db(query)
         return [messages['content']for messages in results ]
 
     @classmethod
     def update(cls, data):
         query = "UPDATE `citas`.`quotes` SET `text` = %(text)s, `updated_at` = NOW() WHERE `id` = %(id)s;"
-        return connectToMySQL(cls.db_name).query_db(query, data)
+        return MySQLConnection(cls.db_name).query_db(query, data)
 
     @classmethod
     def delete_quote(cls, quote_id):
@@ -31,11 +29,11 @@ class message:
             # Eliminar entradas de la tabla favorites vinculadas a la cita
             delete_favorites_query = "DELETE FROM favorites WHERE quote_id = %(quote_id)s;"
             data = {'quote_id': quote_id}
-            connectToMySQL(cls.db_name).query_db(delete_favorites_query, data)
+            MySQLConnection(cls.db_name).query_db(delete_favorites_query, data)
 
             # Eliminar la cita de la tabla quotes
             delete_quote_query = "DELETE FROM quotes WHERE id = %(quote_id)s;"
-            connectToMySQL(cls.db_name).query_db(delete_quote_query, data)
+            MySQLConnection(cls.db_name).query_db(delete_quote_query, data)
 
             return True
         except Exception as e:
@@ -45,7 +43,7 @@ class message:
     @classmethod
     def get_name_by_id(cls, data):
         query = "SELECT quotes.id, quotes.text, users.name FROM quotes LEFT JOIN users ON quotes.user_id = users.id WHERE quotes.id = %(id)s;"
-        results = connectToMySQL(cls.db_name).query_db(query, data)
+        results = MySQLConnection(cls.db_name).query_db(query, data)
         if results:
             return results[0]['users.name']
         else:
@@ -54,7 +52,7 @@ class message:
     @classmethod
     def get_quotes_with_user_names(cls):
         query = "SELECT quotes.id, quotes.text, users.name, users_id FROM quotes LEFT JOIN users ON quotes.users_id = users.id;"
-        results = connectToMySQL(cls.db_name).query_db(query)
+        results = MySQLConnection(cls.db_name).query_db(query)
         quotes_with_names = []
         for row in results:
             quote_with_name = {
