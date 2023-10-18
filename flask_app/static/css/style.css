@@ -3,7 +3,7 @@ body {
 }
 
 .chat-container {
-    background-color: #ffffff;
+    background-color: #575185;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -19,7 +19,7 @@ body {
 }
 
 .message .content {
-    background-color: #f8f9fa;
+   
     border-radius: 8px;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -32,5 +32,6 @@ body {
 }
 
 .message.form-message .content {
-    background-color: #007bff;
+    background-color: #b8f807;
 }
+

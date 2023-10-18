@@ -10,13 +10,13 @@ class Message:
     @classmethod
     def save(cls, data):
         query = "INSERT INTO messages (content, user_id, sent_at) VALUES (%(content)s, %(user_id)s, NOW())"
-        return MySQLConnection('global_chat').query_db(query, data)
-    
+        return MySQLConnection(cls.db_name).query_db(query, data)
+        
     @classmethod
     def get_all_messages(cls):
-        query = "SELECT content FROM messages;"
+        query = "SELECT content, user_id FROM messages;"
         results = MySQLConnection(cls.db_name).query_db(query)
-        return [messages['content']for messages in results ]
+        return results
 
     @classmethod
     def update(cls, data):

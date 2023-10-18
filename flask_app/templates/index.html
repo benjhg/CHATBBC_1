@@ -46,7 +46,7 @@
 
         
         <form action="/login" method="post" class="col-4 p-4 bg-dark text-light">
-            <h2 class="text-success">Login</h2>
+            <h2 class="text-success">INICIAR SESION</h2>
             {% with messages = get_flashed_messages(category_filter=['login']) %}
                 {% if messages %}
                 <div class="alert alert-danger" role="alert">
@@ -58,11 +58,11 @@
                 {% endif %}
             {% endwith %}
             <div class="form-group">
-                <label for="email">Email:</label>
+                <label for="email">GMAIL:</label>
                 <input type="text" name="email" class="form-control">
             </div>
             <div class="form-group">
-                <label for="password">Password:</label>
+                <label for="password">CONTRASEÑA:</label>
                 <input type="password" name="password" class="form-control">
             </div>
             

@@ -1,0 +1,23 @@
+body {
+    background-color: #442F87; /* Fondo de color 442F87 */
+    color: white; /* Letras blancas */
+    font-style: monospace; /* Estilo de letra cursiva */
+}
+
+h1, h2, h3 {
+    text-align: center; /* Centrar el texto en los encabezados */
+}
+
+/* Estilo para la imagen de perfil */
+img {
+    display: block; /* Asegura que la imagen esté centrada en la página */
+    margin: 0 auto;
+}
+
+/* Estilo para la descripción editable */
+#descripcion {
+    border: 1px solid white; /* Borde blanco alrededor de la descripción */
+    padding: 10px;
+    margin: 10px auto;
+    max-width: 400px; /* Ancho máximo de la descripción */
+}

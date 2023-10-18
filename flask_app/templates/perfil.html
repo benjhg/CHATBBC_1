@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <h1>Mi Perfil</h1>
+
+    <img src="tu_foto_de_perfil.jpg" alt="Foto de Perfil" width="150" height="150">
+
+    <h2>Nombre de Usuario: <span id="nombreUsuario">Cargando...</span></h2>
+    <h2>Alias: <span id="alias">Cargando...</span></h2>
+
+    <h3>Videojuegos</h3>
+    <p id="descripcion">Cargando descripción...</p>
+
+    <script>
+        const descripcionElement = document.getElementById("descripcion");
+
+// Utiliza Fetch API para cargar el contenido del archivo
+fetch('descripcion.txt')
+    .then(response => response.text())
+    .then(data => {
+        descripcionElement.textContent = data;
+    })
+    .catch(error => {
+        descripcionElement.textContent = 'No se pudo cargar la descripción.';
+    });y6 
+        // JavaScript para cargar los datos del usuario desde un archivo externo
+        const nombreUsuarioElement = document.getElementById("nombreUsuario");
+        const aliasElement = document.getElementById("alias");
+
+        // Utiliza Fetch API para cargar los datos del archivo JSON
+        fetch('usuario.json')
+            .then(response => response.json())
+            .then(data => {
+                nombreUsuarioElement.textContent = data.username;
+                aliasElement.textContent = data.alias;
+            })
+            .catch(error => {
+                nombreUsuarioElement.textContent = 'No se pudo cargar el nombre de usuario.';
+                aliasElement.textContent = 'No se pudo cargar el alias.';
+            });
+    </script>
+</body>
+</html>

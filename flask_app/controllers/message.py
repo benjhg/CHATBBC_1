@@ -2,6 +2,7 @@ from flask import render_template,redirect, session,request, flash, url_for
 from flask_app import app
 from flask_app.models.messages import Message
 from flask_app.models.users import User
+from flask_app.controllers import user
 from flask_app.config.mysqlconnection import connectToMySQL
 import mysql.connector
 
@@ -11,7 +12,7 @@ def add_message():
     content = request.form.get('content')
 
     # Obten el user_id del usuario autenticado (puedes usar session['user_id'] si está configurado)
-    user_id = 1  # Cambia esto según cómo obtienes el ID del usuario autenticado
+    user_id =  session['user_id']  # Cambia esto según cómo obtienes el ID del usuario autenticado
 
     # Valida el contenido del mensaje
     if not content:

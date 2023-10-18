@@ -44,7 +44,9 @@ def login():
     user = User.get_by_email(request.form)
 
     if user and bcrypt.check_password_hash(user.password, request.form['password']):
+
         session['user_id'] = user.id
+        print(session['user_id'])
         return redirect('/dashboard')
     else:
         flash("Invalid Email or Password", "error")  # Cambiado a 'error'
@@ -53,9 +55,10 @@ def login():
 
 @app.route('/dashboard')
 def dashboard():
-    # Ejemplo de lista de mensajes del chat (simula mensajes de la base de datos)
+    # Obtén los mensajes del chat (simulación de mensajes desde la base de datos)
     chat_messages = Message.get_all_messages()
-    return render_template('dashboard.html', chat_messages=chat_messages)
+    user_id_sesion = session['user_id']
+    return render_template('dashboard.html', chat_messages=chat_messages, user_id_sesion=user_id_sesion)
 
 
 """    if 'user_id' not in session:
@@ -72,30 +75,8 @@ def dashboard():
     # Obtener datos del usuario y todas las citas para mostrar en el dashboard
     user = User.get_by_id({'id': user_id_sesion})
     quotes_with_users = Quote.get_quotes_with_user_names()
-    favorite_quote_ids = Quote.get_favorite_quote_ids(user_id_sesion)"""
-    
-
-
-
-
-
-
-
-
-@app.route('/user_profile/<int:user_id>')
-def user_profile(user_id):
-    user = User.obtener_id(user_id)  # Obtén el usuario por su ID desde la base de datos
-    
-    if user:
-        quotes = Quote.get_quotes_with_user_ids(user_id)  # Obtén las citas publicadas por el usuario
-        total_quotes = Quote.get_total_quotes_by_user_id(user_id)
-        return render_template('show_user.html', user=user, quotes=quotes, total_quotes=total_quotes )
-    else:
-        flash('Usuario no encontrado', 'error')
-        return redirect('/dashboard')
-
-
-
+    favorite_quote_ids = Quote.get_favorite_quote_ids(user_id_sesion)
+    """
 
 
 @app.route('/logout')
