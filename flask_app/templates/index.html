@@ -6,68 +6,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
-    <div class="d-flex justify-content-around">
-        <form action="/register" method="post" class="col-4 p-4 bg-dark text-light">
-            <h2 class="text-primary">Register</h2>
-            {% with messages = get_flashed_messages(category_filter=['register']) %}
-                {% if messages %}
-                <div class="alert alert-danger" role="alert">
-                    <strong>Flash AHHHHHHH!!!!</strong>
-                        {% for message in messages %}
-                        <p>{{message}}</p>
-                        {% endfor %}
-                </div>
-                {% endif %}
-            {% endwith %}
-            <div class="form-group">
-                <label for="first_name">Nombre:</label>
-                <input type="text" name="username" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="text" name="email" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" name="password" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="confirm">Confirm Password:</label>
-                <input type="password" name="confirm" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="last_name">Alias:</label>
-                <input type="text" name="alias" class="form-control">
-            </div>
-            <input type="submit" value="Register" class="btn btn-primary">
-        </form>
+    <br>
+    <br>
+        <div class="cont">
+            <div class="form sign-in">
+                <h2>¡ Bienvenido !</h2>
+                <form action="/login" method="post" >
+                    {% with messages = get_flashed_messages(category_filter=['danger']) %}
+                        {% if messages %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for message in messages %}
+                                <p>{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    {% endwith %}
+                    <label>
+                        <span>Correo</span>
+                        <input type="text" name="email">
+                    </label>
 
-        
-        <form action="/login" method="post" class="col-4 p-4 bg-dark text-light">
-            <h2 class="text-success">INICIAR SESION</h2>
-            {% with messages = get_flashed_messages(category_filter=['login']) %}
-                {% if messages %}
-                <div class="alert alert-danger" role="alert">
-                    <strong>Flash AHHHHHHH!!!!</strong>
-                        {% for message in messages %}
-                        <p>{{message}}</p>
-                        {% endfor %}
+                    
+                    <label>
+                        <span>Contraseña</span>
+                        <input type="password" name="password">
+                    </label>
+
+                    <button type="submit" class="submit">iniciar sesion</button>
+                </form>
+            </div>
+            <div class="sub-cont">
+                <div class="img">
+                    <div class="img__text m--up">
+                     
+                        <h3>¿No tienes cuenta? Porfavor ¡Registrate!<h3>
+                    </div>
+                    <div class="img__text m--in">
+                    
+                        <h3>Si ya tiene una cuenta, simplemente inicie sesión.<h3>
+                    </div>
+                    <div class="img__btn">
+                        <span class="m--up">Registrarse</span>
+                        <span class="m--in">Iniciar sesion</span>
+                    </div>
                 </div>
-                {% endif %}
-            {% endwith %}
-            <div class="form-group">
-                <label for="email">GMAIL:</label>
-                <input type="text" name="email" class="form-control">
+                <div class="form sign-up">
+                    
+                    <form action="/register" method="post">
+                        <h2>Crea tu Cuenta</h2>
+                        {% with messages = get_flashed_messages(category_filter=['register']) %}
+                            {% if messages %}
+                            <div class="alert alert-danger" role="alert">
+                                    {% for message in messages %}
+                                    <p>{{message}}</p>
+                                    {% endfor %}
+                            </div>
+                            {% endif %}
+                        {% endwith %}
+                        <label>
+                            <span>Nombre</span>
+                            <input type="text" name="username">
+                        </label>
+                        <label>
+                            <span>Gmail</span>
+                            <input type="text" name="email">
+                        </label>
+                        <label>
+                            <span>Contraseña</span>
+                            <input type="password" name="password">
+                        </label>
+                        <label>
+                            <span>Confirmar contraseña</span>
+                            <input type="password" name="confirm">
+                        </label>
+                        <label>
+                            <span>Alias</span>
+                            <input type="text" name="alias">
+                        </label>
+                        <button type="submit" value="Register" class="submit">Registrarse</button>
+                    </form>    
+                </div>
             </div>
-            <div class="form-group">
-                <label for="password">CONTRASEÑA:</label>
-                <input type="password" name="password" class="form-control">
-            </div>
-            
-            <input type="submit" value="Login" class="btn btn-success">
-        </form>
-    </div>
+        </div>
+    
+        <script>
+            document.querySelector('.img__btn').addEventListener('click', function() {
+                document.querySelector('.cont').classList.toggle('s--signup');
+            });
+        </script>
 </body>
 </html>

@@ -11,10 +11,10 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
+       
+    </head>
 
 <body>
-
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
             <a class="navbar-brand" >CHAT BBC</a>
@@ -23,14 +23,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
+                    
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-house fa-beat fa-xl" style="color: #29aae2;"></i></a>
+                        <a class="nav-link" href="/user_profile/{{ session['user_id'] }}"><i class="fa-regular fa-beat fa-user fa-xl" style="color: #ff0099;"></i></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-regular fa-beat fa-user fa-xl" style="color: #ff0099;"></i></i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-gear fa-beat fa-xl" style="color: #29aae2;"></i></a>
+                        <a class="nav-link" href="/edit_profile"><i class="fa-solid fa-gear fa-beat fa-xl" style="color: #29aae2;"></i></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link btn btn-danger" href="{{ url_for('logout') }}">Cerrar Sesión</a>
@@ -42,23 +40,27 @@
 
     <br>
     <br>
-    <div class="row">
-        <div class="col-md-8 offset-md-2 chat-container">
-            <ul class="chat-messages">
-                {% for message in chat_messages %}
-                    <li class="message {% if message.user_id == user_id_sesion %}text-right text-success{% else %}text-left text-secondary{% endif %}">
-                        <span class="content">{{ message.content }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
 
-            <form action="/add_message" method="post" class="form-message">
-                <div class="form-group">
-                    <label for="content">Mensaje:</label>
-                    <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Enviar</button>
-            </form>
+    <div class="container img-cont" id="parte-a-actualizar">
+        <div class="row">
+            <div class="col-md-10 offset-md-1 chat-container">
+                <ul class="chat-messages">
+                    {% for message in chat_messages %}
+                        <li class="message {% if message.user_id == user_id_sesion %}text-right{% else %}text-left{% endif %}">
+                            <span class="content">{{ message.content }}</span>
+                        </li>
+                        <br>
+                    {% endfor %}
+                </ul>
+
+                <form action="/add_message" method="post" class="form-message">
+                    <div class="form-group">
+                        <label for="content">Mensaje:</label>
+                        <textarea class="form-control" id="content" name="content"  required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </form>
+            </div>
         </div>
     </div>
  

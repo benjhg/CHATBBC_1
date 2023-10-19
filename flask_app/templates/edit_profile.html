@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Perfil</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">       
+</head>
+<body>
+   
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand">CHAT BBC</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard"><i class="fa-solid fa-house fa-beat fa-xl"
+                                style="color: #29aae2;"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user_profile/{{ session['user_id'] }}"><i
+                                class="fa-regular fa-beat fa-user fa-xl" style="color: #ff0099;"></i></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/edit_profile"><i class="fa-solid fa-gear fa-beat fa-xl"
+                                style="color: #29aae2;"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-danger" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1 class="text-center mb-4 text-white">Editar Perfil</h1>
+                <form method="post" action="/update_profile">
+                    <div class="form-group">
+                        <label class="text-white" for="username">Nombre de usuario:</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                            value="{{ profile_data['username'] }}">
+                    </div>
+                
+                    <div class="form-group">
+                        <label class="text-white" for="email">Correo electrónico:</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                            value="{{ profile_data['email'] }}">
+                    </div>
+                
+                    <div class="form-group">
+                        <label class="text-white" for="alias">Alias:</label>
+                        <input type="text" class="form-control" id="alias" name="alias"
+                            value="{{ profile_data['alias'] }}">
+                    </div>
+                
+                    <div class="form-group">
+                        <label class="text-white" for="password">Contraseña:</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                            value="{{ profile_data['password'] }}">
+                    </div>
+                
+                    <!-- Otros campos de perfil -->
+                
+                    <button type="submit" class="btn btn-primary btn-block mt-4">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

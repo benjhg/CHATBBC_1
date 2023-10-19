@@ -47,6 +47,26 @@ class User:
         return None
 
     @classmethod
+    def update_user_profile(cls, user_id, new_username, new_email, new_alias, new_password):
+        query = """
+            UPDATE users
+            SET username = COALESCE(%(username)s, username),
+                email = COALESCE(%(email)s, email),
+                alias = COALESCE(%(alias)s, alias),
+                password = COALESCE(%(password)s, password)
+            WHERE id = %(user_id)s;
+        """
+        data = {
+            'user_id': user_id,
+            'username': new_username,
+            'email': new_email,
+            'alias': new_alias,
+            'password': new_password
+        }
+        return connectToMySQL(cls.db_name).query_db(query, data)
+
+
+    @classmethod
     def obtener_id(cls, user_id):
         query = "SELECT * FROM users WHERE id = %(id)s;"
         data = {'id': user_id}

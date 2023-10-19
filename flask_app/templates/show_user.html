@@ -7,42 +7,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Citas del Usuario</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">       
+    </head>
 
 <body>
-    
-    <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex">
-        <div class="collapse navbar-collapse p-2" >
-            <a href="{{ url_for('dashboard') }}">Dashboard</a>
-            
-        </div>    
-    
-        <a href="{{ url_for('logout') }}">Logout</a>
-        </div>    
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" >CHAT BBC</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard"><i class="fa-solid fa-house fa-beat fa-xl" style="color: #29aae2;"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user_profile/{{ session['user_id'] }}"><i class="fa-regular fa-beat fa-user fa-xl" style="color: #ff0099;"></i></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/edit_profile"><i class="fa-solid fa-gear fa-beat fa-xl" style="color: #29aae2;"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-danger" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
-
     <div class="container mt-5">
-
-
-        <!-- Mostrar citas -->
-        <h1>Posted by {{ user.name }}</h1>
-        <br>
-        <p>Count: {{ total_quotes }}</p>
-        
-        <ul>
-            {% if quotes %}
-                {% for quote in quotes %}
-                    <br>
-                    {{ quote.text }}  <!-- Asegúrate de utilizar el atributo correcto para el texto de la cita -->
-                    <br>
-                {% endfor %}
-            {% else %}
-                <li>No hay citas disponibles...</li>
+        <h1 class="mb-4 text-white">Perfil de Usuario</h1>
+        {% with messages = get_flashed_messages(category_filter=['warning']) %}
+            {% if messages %}
+                <div class="alert alert-warning" role="alert">
+                    {% for message in messages %}
+                        <p class="text-white">{{ message }}</p>
+                    {% endfor %}
+                </div>
             {% endif %}
-        </ul>
+        {% endwith %}
+
+        {% if user %}
+            <div class="text-center">
+                <h2 class="text-white">Bienvenido, {{ user.username }}!</h2>
+                <p class="color_rosa">Correo electrónico: {{ user.email }}</p>
+                <p class="color_rosa">Alias: {{ user.alias }}</p>
+                
+            </div>
+
+        {% else %}
+            <p>Usuario no encontrado. Por favor, inicia sesión para ver tu perfil.</p>
+        {% endif %}
+
+        <div class="container">
+            <h1 class="text-white">Lista de Juegos</h1>
+            <div class="d-flex flex-row flex-wrap">
+                {% for game in games %}
+                    <div class="card" style="width: 14rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ game.title }}</h5>
+                            <p class="card-text">Género: {{ game.genre }}</p>
+                            {% if game.is_favorite %}
+                                <form action="/remove_game/{{ game.id }}" method="post">
+                                    <button type="submit" class="btn btn-danger">Eliminar de favoritos</button>
+                                </form>
+                            {% else %}
+                                <form action="/añadir_juego/{{ game.id }}" method="post">
+                                    <button type="submit" class="btn btn-warning">Añadir a favoritos</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </body>
 
-
 </html>
+
+
+
+
